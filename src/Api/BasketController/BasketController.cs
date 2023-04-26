@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("api/baskets")]
+[Route("baskets")]
 public class BasketController : ControllerBase
 {
     private readonly IBasketRepository _basketRepository;

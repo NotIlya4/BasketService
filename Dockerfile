@@ -2,15 +2,15 @@
 
 # Restore
 WORKDIR /src
-COPY Api/Api.csproj Api/
-COPY Infrastructure/Infrastructure.csproj Infrastructure/
-COPY Domain/Domain.csproj Domain/
+COPY src/Api/Api.csproj Api/
+COPY src/Infrastructure/Infrastructure.csproj Infrastructure/
+COPY src/Domain/Domain.csproj Domain/
 WORKDIR /src/Api
 RUN dotnet restore
 
 # Copy rest files
 WORKDIR /src
-COPY . .
+COPY src/ .
 
 # Build
 WORKDIR /src/Api
