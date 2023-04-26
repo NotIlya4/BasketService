@@ -1,23 +1,13 @@
 ﻿namespace Domain.Entities;
 
-public record Basket : IEntityComparable<Basket>
+public record Basket
 {
-    public Guid Id { get; private set; }
-    public List<BasketItem> Items { get; private set; }
+    public Guid UserId { get; }
+    public List<BasketItem> Items { get; }
 
-    public Basket(Guid id, List<BasketItem> items)
+    public Basket(Guid userId, List<BasketItem> items)
     {
-        Id = id;
+        UserId = userId;
         Items = items;
-    }
-    
-    public bool EqualId(Basket? entity)
-    {
-        if (entity is null)
-        {
-            return false;
-        }
-
-        return Id.Equals(entity.Id);
     }
 }

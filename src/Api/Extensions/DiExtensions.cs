@@ -1,5 +1,6 @@
 ﻿using ExceptionCatcherMiddleware.Extensions;
 using Infrastructure.ExceptionMapping;
+using Infrastructure.Mappers.BasketEntity;
 using Infrastructure.Repositories;
 using StackExchange.Redis;
 
@@ -7,8 +8,11 @@ namespace Api.Extensions;
 
 public static class DiExtensions
 {
-    public static void AddRepositories(this IServiceCollection services)
+    public static void AddRepository(this IServiceCollection services, BasketRepositoryOptions options)
     {
+        services.AddSingleton(options);
+        services.AddScoped<DataMapper>();
+        services.AddScoped<ViewMapper>();
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<BasketSerializer>();
     }

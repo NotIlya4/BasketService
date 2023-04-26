@@ -2,10 +2,10 @@
 
 namespace Domain.Entities;
 
-public record struct BasketItem
+public record BasketItem
 {
-    public Guid ProductId { get; private set; }
-    public Quantity Quantity { get; private set; }
+    public Guid ProductId { get; }
+    public Quantity Quantity { get; }
 
     public BasketItem(Guid productId, Quantity quantity)
     {

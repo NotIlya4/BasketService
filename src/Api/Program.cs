@@ -8,8 +8,8 @@ IServiceCollection services = builder.Services;
 ParametersProvider parameters = new(builder.Configuration);
 
 services.AddControllers();
-services.AddRepositories();
-services.AddScoped<BasketViewMapper>();
+services.AddRepository(parameters.GetBasketRepositoryOptions());
+services.AddScoped<ViewMapper>();
 services.AddExceptionMappers();
 services.AddRedis(parameters.GetRedisConnectionString());
 services.AddEndpointsApiExplorer();

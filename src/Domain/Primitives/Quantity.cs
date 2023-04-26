@@ -2,15 +2,15 @@
 
 namespace Domain.Primitives;
 
-public record struct Quantity
+public record Quantity
 {
-    public int Value { get; private set; }
+    public int Value { get; }
 
     public Quantity(int value)
     {
         if (!(value >= 0))
         {
-            throw new ValidationException("Quantity must be bigger than 0");
+            throw new DomainValidationException("Quantity must be bigger than 0");
         }
 
         Value = value;

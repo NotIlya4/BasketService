@@ -5,33 +5,35 @@ namespace Infrastructure.Repositories;
 
 public class BasketRepository : IBasketRepository
 {
-    public BasketSerializer BasketSerializer { get; }
-    private IDatabase Db { get; }
+    private readonly BasketSerializer _serializer;
+    private readonly IDatabase _redis;
+    private readonly TimeSpan _expire;
 
-    public BasketRepository(IConnectionMultiplexer redis, BasketSerializer basketSerializer)
+    public BasketRepository(IConnectionMultiplexer redis, BasketSerializer serializer, BasketRepositoryOptions options)
     {
-        BasketSerializer = basketSerializer;
-        Db = redis.GetDatabase();
+        _serializer = serializer;
+        _redis = redis.GetDatabase();
+        _expire = options.UserBasketExpireTime;
     }
     
-    public async Task<Basket> GetBasket(Guid id)
+    public async Task<Basket> Get(Guid userId)
     {
-        string? data = await Db.StringGetAsync(id.ToString());
+        string? data = await _redis.StringGetAsync(BuildKey(userId));
 
         if (data is null)
         {
             throw new EntityNotFoundException(nameof(Basket));
         }
 
-        return BasketSerializer.Deserialize(data);
+        return _serializer.Deserialize(data);
     }
 
     public async Task Insert(Basket basket)
     {
-        bool result = await Db.StringSetAsync(
-            basket.Id.ToString(), 
-            BasketSerializer.Serialize(basket),
-            TimeSpan.FromDays(30));
+        bool result = await _redis.StringSetAsync(
+            BuildKey(basket.UserId), 
+            _serializer.Serialize(basket),
+            _expire);
 
         if (!result)
         {
@@ -39,13 +41,8 @@ public class BasketRepository : IBasketRepository
         }
     }
 
-    public async Task Delete(Guid id)
+    private string BuildKey(Guid userId)
     {
-        bool result = await Db.KeyDeleteAsync(id.ToString());
-
-        if (!result)
-        {
-            throw new BasketRepositoryException("Failed to delete the basket");
-        }
+        return $"{userId.ToString()} basket";
     }
 }

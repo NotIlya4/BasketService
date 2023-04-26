@@ -4,19 +4,19 @@ using Domain.Primitives;
 
 namespace Infrastructure.Mappers.BasketEntity;
 
-public class BasketViewMapper
+public class ViewMapper
 {
     public Basket Map(BasketView basketView)
     {
         return new Basket(
-            id: new Guid(basketView.Id),
+            userId: basketView.UserId,
             items: Map(basketView.Items));
     }
 
     public BasketItem Map(BasketItemView basketItemView)
     {
         return new BasketItem(
-            productId: new Guid(basketItemView.ProductId),
+            productId: basketItemView.ProductId,
             quantity: new Quantity(basketItemView.Quantity));
     }
 
@@ -27,20 +27,16 @@ public class BasketViewMapper
 
     public BasketView Map(Basket basket)
     {
-        return new BasketView()
-        {
-            Id = basket.Id.ToString(),
-            Items = basket.Items.Select(Map).ToList()
-        };
+        return new BasketView(
+            userId: basket.UserId,
+            items: basket.Items.Select(Map).ToList());
     }
 
     public BasketItemView Map(BasketItem basketItem)
     {
-        return new BasketItemView()
-        {
-            ProductId = basketItem.ProductId.ToString(),
-            Quantity = basketItem.Quantity.Value
-        };
+        return new BasketItemView(
+            productId: basketItem.ProductId,
+            quantity: basketItem.Quantity.Value);
     }
 
     public List<BasketItemView> Map(IEnumerable<BasketItem> basketItems)

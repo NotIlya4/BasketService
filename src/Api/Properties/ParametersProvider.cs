@@ -1,12 +1,14 @@
-﻿namespace Api.Properties;
+﻿using Infrastructure.Repositories;
+
+namespace Api.Properties;
 
 public class ParametersProvider
 {
-    public IConfiguration Configuration { get; }
+    private readonly IConfiguration _config;
 
-    public ParametersProvider(IConfiguration configuration)
+    public ParametersProvider(IConfiguration config)
     {
-        Configuration = configuration;
+        _config = config;
     }
     
     public string GetRedisConnectionString()
@@ -17,8 +19,25 @@ public class ParametersProvider
         return $"{server},defaultDatabase={databaseNumber}";
     }
 
-    public string GetRequiredConfiguration(string path)
+    public BasketRepositoryOptions GetBasketRepositoryOptions()
     {
-        return Configuration.GetSection(path).Value ?? throw new ConfigurationNotFoundException(path);
+        float days = GetRequiredValue<float>("BasketExpiresInDays");
+        return new BasketRepositoryOptions(TimeSpan.FromDays(days));
+    }
+
+    private T GetRequiredValue<T>(string key)
+    {
+        T? value = _config.GetValue<T>(key);
+        if (value is null)
+        {
+            throw new InvalidOperationException($"{key} configuration not found");
+        }
+
+        return value;
+    }
+
+    private string GetRequiredConfiguration(string path)
+    {
+        return _config.GetSection(path).Value ?? throw new ConfigurationNotFoundException(path);
     }
 }
