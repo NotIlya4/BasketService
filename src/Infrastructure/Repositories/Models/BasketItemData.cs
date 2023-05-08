@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Repositories.Models;
 
-public class BasketItemData
+public record BasketItemData
 {
     public string ProductId { get; }
     public int Quantity { get; }

@@ -34,13 +34,13 @@ public class DataMapper
     {
         return new BasketData(
             userId: basket.UserId.ToString(),
-            basketItems: MapBasketItem(basket.Items));
+            items: MapBasketItem(basket.Items));
     }
 
     public Basket MapBasket(BasketData basketData)
     {
         return new Basket(
             userId: new Guid(basketData.UserId),
-            items: MapBasketItem(basketData.BasketItems));
+            items: MapBasketItem(basketData.Items));
     }
 }

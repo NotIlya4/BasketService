@@ -1,4 +1,5 @@
-﻿using Infrastructure.Repositories;
+﻿using Api.Extensions;
+using Infrastructure.Repositories;
 
 namespace Api.Properties;
 
@@ -10,34 +11,11 @@ public class ParametersProvider
     {
         _config = config;
     }
-    
-    public string GetRedisConnectionString()
-    {
-        string server = GetRequiredConfiguration("RedisConnectionString:Server");
-        string databaseNumber = GetRequiredConfiguration("RedisConnectionString:DatabaseNumber");
 
-        return $"{server},defaultDatabase={databaseNumber}";
+    public string Redis => _config.GetRedisConnectionString("RedisConnectionString");
+
+    public BasketRepositoryOptions BasketRepositoryOptions =>
+        new (TimeSpan.FromDays(_config.GetRequiredValue<float>("BasketExpiresInDays")));
+
+    public string Seq => _config.GetRequiredValue("SeqUrl");
     }
-
-    public BasketRepositoryOptions GetBasketRepositoryOptions()
-    {
-        float days = GetRequiredValue<float>("BasketExpiresInDays");
-        return new BasketRepositoryOptions(TimeSpan.FromDays(days));
-    }
-
-    private T GetRequiredValue<T>(string key)
-    {
-        T? value = _config.GetValue<T>(key);
-        if (value is null)
-        {
-            throw new InvalidOperationException($"{key} configuration not found");
-        }
-
-        return value;
-    }
-
-    private string GetRequiredConfiguration(string path)
-    {
-        return _config.GetSection(path).Value ?? throw new ConfigurationNotFoundException(path);
-    }
-}
