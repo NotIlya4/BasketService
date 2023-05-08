@@ -10,4 +10,19 @@ public record Basket
         UserId = userId;
         Items = items;
     }
+
+    public virtual bool Equals(Basket? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        return UserId.Equals(other.UserId) && Items.SequenceEqual(other.Items);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(UserId, Items);
+    }
 }

@@ -2,26 +2,28 @@ using Api.Extensions;
 using Api.Properties;
 using ExceptionCatcherMiddleware.Extensions;
 using Infrastructure.Mappers.BasketEntity;
+using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
 ParametersProvider parameters = new(builder.Configuration);
 
-services.AddControllers();
-services.AddRepository(parameters.GetBasketRepositoryOptions());
-services.AddScoped<ViewMapper>();
+services.AddRepository(parameters.BasketRepositoryOptions);
+services.AddMappers();
 services.AddExceptionMappers();
-services.AddRedis(parameters.GetRedisConnectionString());
+services.AddRedis(parameters.Redis);
+services.AddConfiguredSwaggerGen();
+builder.AddSerilog(parameters.Seq);
+
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddControllers();
 
 WebApplication app = builder.Build();
 
+app.UseSerilogRequestLogging();
 app.UseExceptionCatcherMiddleware();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

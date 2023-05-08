@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.ExceptionMapping;
 
-public class EntityNotFoundExceptionMapper : IExceptionMapper<EntityNotFoundException>
+public class EntityNotFoundExceptionMapper : IExceptionMapper<BasketNotFoundException>
 {
-    public BadResponse Map(EntityNotFoundException exception)
+    public BadResponse Map(BasketNotFoundException exception)
     {
         return new BadResponse()
         {

@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Infrastructure.Repositories.Models;
 using Newtonsoft.Json.Linq;
 
@@ -31,6 +30,6 @@ public class BasketSerializer
 
     public BasketData DeserializeData(string basket)
     {
-        return JObject.Parse(basket).ToObject<BasketData>();
+        return JObject.Parse(basket).ToObject<BasketData>() ?? throw new InvalidOperationException("Failed to deserialize basket");
     }
 }
