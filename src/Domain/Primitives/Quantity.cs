@@ -8,7 +8,7 @@ public record Quantity
 
     public Quantity(int value)
     {
-        if (!(value >= 0))
+        if (!(value > 0))
         {
             throw new DomainValidationException("Quantity must be bigger than 0");
         }
