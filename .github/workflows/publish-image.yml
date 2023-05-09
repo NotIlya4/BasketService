@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - test/test-workflows
+      - test/test-image-workflow
     tags:
       - v*
     paths:
