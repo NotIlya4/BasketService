@@ -8,7 +8,7 @@ public class QuantityConstructorTests
     [Fact]
     public void Zero_ThrowException()
     {
-        Assert.Throws<DomainValidationException>(() => new Quantity(0));
+        Assert.Throws<DomainValidationException>(() => new Quantity(1));
     }
 
     [Fact]
