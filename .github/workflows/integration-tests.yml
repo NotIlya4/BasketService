@@ -1,0 +1,43 @@
+﻿name: Integration tests
+
+on:
+  push:
+    branches:
+    paths:
+      - src/**
+  pull_request:
+    branches:
+    paths:
+      - src/**
+
+jobs:
+  run_integration_tests:
+    name: Run integration tests
+    runs-on: ubuntu-latest
+    
+    services:
+      sql-server:
+        image: redis
+        ports:
+          - 6379:6379
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7
+
+      - name: Restore dependencies
+        run: |
+          cd src
+          dotnet restore
+          echo "✅ Project restored"
+
+      - name: Run tests
+        run: |
+          cd src/IntegrationTests
+          dotnet test --no-restore
+          echo "✅ Tests executed"
