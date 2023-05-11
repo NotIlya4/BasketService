@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     
     services:
-      sql-server:
+      redis:
         image: redis
         ports:
           - 6379:6379

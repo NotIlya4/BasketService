@@ -19,6 +19,9 @@ public class BasketController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Route("user/id/{userId}")]
     public async Task<ActionResult<BasketView>> GetBasket(string userId)
     {
@@ -28,6 +31,9 @@ public class BasketController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> InsertBasket(BasketView basketView)
     {
         Basket basket = _mapper.Map(basketView);
