@@ -1,4 +1,4 @@
-﻿# Basket service
+# BasketService
 This is a REST API Service that provides CRUD endpoints for managing basket. See swagger for endpoints docs.
 
 ## Environment Variables
