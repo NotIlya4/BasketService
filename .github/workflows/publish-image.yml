@@ -34,7 +34,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: notilya4/basket-service
+          images: notilya4/yet-another-marketplace.basket-service
           tags: |
             type=sha
             type=semver,pattern={{version}}
